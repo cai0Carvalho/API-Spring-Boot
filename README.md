@@ -46,7 +46,7 @@ A estrutura do projeto segue o padrão abaixo:
 2. Acesse o diretório do projeto:
 
 ```sh
-    cd seu-repositorio
+    cd https://github.com/cai0Carvalho/API-Spring-Boot.git
 ```
 3. Compile e execute a aplicação:
 
