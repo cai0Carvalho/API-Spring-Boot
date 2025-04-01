@@ -4,9 +4,9 @@ target/
 /src/main/**/target/
 /src/test/**/target/
 
-/.gitattributes/
-/mvnw/
-/mvnw.cmd/
+.gitattributes
+mvnw
+mvnw.cmd
 
 ### STS ###
 .apt_generated
