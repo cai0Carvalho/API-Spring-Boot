@@ -16,6 +16,16 @@ A estrutura do projeto segue o padrão abaixo:
     │   │   ├── Projeto1Application.java  # Classe principal que inicia o Spring Boot
     ```
 
+### O projeto segue o padrão MVC (Model-View-Controller), onde:
+
+- Controller: Recebe requisições e retorna respostas apropriadas.
+
+- Entity: Representa as tabelas do banco de dados, sendo gerenciada pelo JPA/Hibernate para persistência dos dados.
+
+- Service: Contém regras de negócio e evita lógica na camada de controle.
+
+- Repository: Responsável pelo acesso aos dados com Spring Data JPA.
+
 ## Tecnologias Utilizadas
 - Java 17+
 
