@@ -5,7 +5,7 @@ Este é um projeto desenvolvido com Spring Boot, com a finalidade de criar APIs 
 ## Estrutura do Projeto
 A estrutura do projeto segue o padrão abaixo:
 
-    ```bash
+```bash
     src/
     ├── main/
     │   ├── java/com/projeto/
@@ -14,7 +14,7 @@ A estrutura do projeto segue o padrão abaixo:
     │   │   ├── repository/   # Interfaces de repositórios para acesso ao banco de dados
     │   │   ├── service/      # Camada de serviços com a lógica de negócios
     │   │   ├── Projeto1Application.java  # Classe principal que inicia o Spring Boot
-    ```
+```
 
 ### O projeto segue o padrão MVC (Model-View-Controller), onde:
 
