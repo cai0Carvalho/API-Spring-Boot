@@ -8,12 +8,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.projeto.dto.LoginCredentials;
 import com.projeto.entity.User;
 import com.projeto.security.JWTUtil;
 import com.projeto.service.UserService;
@@ -61,7 +61,7 @@ public class AuthController {
         try{
             // Criando o token que sera usado no processo de autenticacao
             UsernamePasswordAuthenticationToken authInpuToken = 
-                new UsernamePasswordAuthenticationToken(body.getEmail(), body.getUserPassword());
+                new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword());
 
             // Autenticando as credenciais de login
             authManager.authenticate(authInpuToken);
