@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Produto_Id")
+    @Column(name = "produto_Id")
     private Integer produtoId;
 
     public Integer getProdutoId() {
@@ -39,7 +39,7 @@ public class Produto {
         this.produtoNome = produtoNome;
     }
 
-    @Column(name = "Produto_Nome")
+    @Column(name = "produto_Nome")
     private String produtoNome;
 
     @ManyToOne

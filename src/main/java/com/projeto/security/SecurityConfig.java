@@ -1,10 +1,7 @@
 package com.projeto.security;
 
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,65 +17,64 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.projeto.repository.UserRepositoy;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     
-    @Autowired UserRepositoy UserRepo;
-    @Autowired private JWTFilter filter;
-    @Autowired private UserDetailsServiceImpl uds;
+    private final JWTFilter jwtFilter;
+    private final UserDetailsServiceImpl userDetailsService;
+
+    public SecurityConfig(JWTFilter jwtFilter, UserDetailsServiceImpl userDetailsService) {
+        this.jwtFilter = jwtFilter;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-      http
-        .httpBasic(httpBasic -> httpBasic.disable())// Desativa autenticação básica
-        .cors(cors -> cors.configurationSource(corsConfigurationSource()))//habilitando o cors
-
-        // Autorizando requisições de entrada
-        .authorizeHttpRequests( auth -> auth
-            .requestMatchers("/auth/**").permitAll()// Autorizando requisições autenticadas
-            .requestMatchers("/user/**").hasRole("USER")// Autorizando apenas usuários com o perfil "USER" a utilizar este endpoint
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**").disable())// Desativa CSRF para permitir APIs REST
+            .cors(cors -> cors.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // API sem estado
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
+            .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/auth/**", "/auth/registro", "/auth/login").permitAll()
+            .requestMatchers("/user/info").permitAll()
+            .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // Permissões adicionais
             .anyRequest().authenticated()
-        )
-         .userDetailsService(uds) // Define o serviço de usuários
-        .exceptionHandling( ex -> ex
-            .authenticationEntryPoint ((request, response, authException) -> 
-                response.sendError (HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
-            )
+            
         )
         
-        // Configurando a Sessão para que cada requisção seja independente (stateless)
-        .sessionManagement( session -> session
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        );
 
-        // Adicionando o filtro JWT
-        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint((request, response, authException) -> 
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+                )
+            )
+
+            .userDetailsService(userDetailsService) // Define o serviço de usuários
+            
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Filtro JWT antes da autenticação padrão
 
         return http.build();
     }
 
-    // Bean (tipo de Service) que sera responsavel por encriptar a senha
     @Bean
-    public PasswordEncoder passwordEconder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // Expondo o bean responsavel pelo gerenciamento do processo de autenticacao
     @Bean
-    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authConfig) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:9090")); // Domínio do frontend
+        configuration.setAllowedOrigins(List.of("*")); // 🔹 Aceita requisições de qualquer origem (para desenvolvimento)
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true); // Permitir envio de cookies
+        configuration.setAllowCredentials(true); 
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

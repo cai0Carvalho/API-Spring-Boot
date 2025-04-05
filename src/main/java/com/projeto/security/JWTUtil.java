@@ -2,6 +2,8 @@ package com.projeto.security;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,21 +16,31 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projeto.entity.User;
 
+import jakarta.annotation.PostConstruct;
+
 @Component
 public class JWTUtil {
+
+    private static final Logger logger = LoggerFactory.getLogger(JWTUtil.class);
+
     // Le a propriedade jwt-secret a partir do application.properties
-    @Value("${jwt-subject}") private String secret;
+    @Value("${jwt-secret}") private String secret;
     // Le a propriedade jwt-subject a partir do application.properties
     @Value("${jwt-subject}") private String subject;
     // Le a propriedade jwt-company-project-name a partir do application.properties
-    @Value("${jwt-subject-project-name}") private String companyProjectName;
+    @Value("${jwt-company-project-name}") private String companyProjectName;
+
+     @PostConstruct
+    public void logConfig() {
+        logger.info("JWTUtil Config -> secret: {}, subject: {}, projectName: {}", secret, subject, companyProjectName);
+    }
 
         // Metodo utilizado no login e para criar o JWT contendo alguns dados gerais e o e-mail do usuario
     public String generateToken(String email) throws IllegalArgumentException, JWTCreationException{
         return JWT.create()
             .withSubject(subject)
             .withClaim("email", email)
-            .withIssuedAt(new Date())
+            .withIssuedAt(new Date())   
             .withIssuer(companyProjectName)
             .sign(Algorithm.HMAC256(secret));
     }
@@ -71,6 +83,6 @@ public class JWTUtil {
 
         //System.out.println("Email: " + user.getEmail());
         //return jwt.getClaim("email").asString();
-        return user.getUserEmail();
+        return user.getEmail();
     }
 }

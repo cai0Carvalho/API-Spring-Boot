@@ -17,11 +17,11 @@ public class User {
 	@Column(name = "user_id")
 	private Integer userId;
 
-    @Column(name = "Nome_usuario")
+    @Column(name = "nome_usuario")
     private String usuarioNome;
 
-    @Column(name = "Email_usuario")
-    private String userEmail;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "user_password")
@@ -43,12 +43,12 @@ public class User {
         this.usuarioNome = usuarioNome;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUserPassword() {

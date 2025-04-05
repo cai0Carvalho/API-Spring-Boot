@@ -17,10 +17,10 @@ import jakarta.persistence.Table;
 public class Categoria {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Categoria_Id")
+    @Column(name = "categoria_Id")
     private Integer categoriaId;
 
-    @Column(name = "Categoria_Nome")
+    @Column(name = "categoria_Nome")
     private String categoriaNome;
 
     @OneToMany (mappedBy = "categoria")
