@@ -38,7 +38,7 @@ public class SecurityConfig {
             .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
             .authorizeHttpRequests(auth -> auth
             .requestMatchers("/auth/**", "/auth/registro", "/auth/login").permitAll()
-            .requestMatchers("/user/info").permitAll()
+            .requestMatchers("/user/info").authenticated()
             .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // Permissões adicionais
             .anyRequest().authenticated()
             

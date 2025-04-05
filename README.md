@@ -1,6 +1,8 @@
-## Projeto Spring Boot
+## 📦 Projeto Spring Boot - API REST
 ### Descrição
-Este é um projeto desenvolvido com Spring Boot, com a finalidade de criar APIs REST utilizando a arquitetura MVC (Model-View-Controller). O projeto contém controllers, serviços, entidades e repositórios bem estruturados para facilitar a manutenção e escalabilidade.
+Este é um projeto desenvolvido com Spring Boot, com a finalidade de criar APIs RESTful seguindo a arquitetura MVC (Model-View-Controller). O sistema está estruturado em controllers, services, entities e repositories, com foco em escalabilidade, segurança e boas práticas.
+
+Agora, o projeto também conta com segurança via Spring Security, autenticação com JWT e documentação da API utilizando Swagger (Springdoc OpenAPI).
 
 ## Estrutura do Projeto
 A estrutura do projeto segue o padrão abaixo:
@@ -9,24 +11,43 @@ A estrutura do projeto segue o padrão abaixo:
     src/
     ├── main/
     │   ├── java/com/projeto/
-    │   │   ├── controller/   # Contém os controllers da aplicação
-    │   │   ├── entity/       # Entidades que representam os modelos de dados
-    │   │   ├── repository/   # Interfaces de repositórios para acesso ao banco de dados
-    │   │   ├── service/      # Camada de serviços com a lógica de negócios
-    │   │   ├── Projeto1Application.java  # Classe principal que inicia o Spring Boot
+    │   │   ├── config/        # Configurações do Springdoc.
+    │   │   ├── controller/    # Camada de controle (HTTP)
+    │   │   ├── entity/        # Modelos de dados (JPA)
+    │   │   ├── repository/    # Interfaces de acesso ao banco
+    │   │   ├── service/       # Lógica de negócio
+    │   │   └── Projeto1Application.java  # Classe principal da aplicação
 ```
 
-### O projeto segue o padrão MVC (Model-View-Controller), onde:
+### 🧱 Padrão Arquitetural (MVC)
 
-- Controller: Recebe requisições e retorna respostas apropriadas.
+- Controller: Lida com as requisições e respostas HTTP.
 
-- Entity: Representa as tabelas do banco de dados, sendo gerenciada pelo JPA/Hibernate para persistência dos dados.
+- Entity: Representa as tabelas do banco via JPA.
 
-- Service: Contém regras de negócio e evita lógica na camada de controle.
+- Service: Contém regras de negócio (evita lógica nos controllers).
 
-- Repository: Responsável pelo acesso aos dados com Spring Data JPA.
+- Repository: Camada de persistência com Spring Data JPA.
 
-## Tecnologias Utilizadas
+## 🔐 Segurança
+O projeto utiliza Spring Security com as seguintes funcionalidades:
+
+- Autenticação baseada em JWT (JSON Web Tokens)
+
+- Senhas criptografadas com BCrypt
+
+- Filtros para autorização de endpoints
+
+- Rotas públicas e protegidas definidas via configuração
+
+## 🧪 Documentação da API (Swagger)
+A documentação é gerada automaticamente com o Springdoc OpenAPI.
+
+° Acesse: http://localhost:8081/swagger-ui/index.html
+
+° Documentação em JSON: http://localhost:8081/v3/api-docs
+
+## 🚀 Tecnologias Utilizadas
 - Java 17+
 
 - Spring Boot
@@ -35,32 +56,44 @@ A estrutura do projeto segue o padrão abaixo:
 
 - Spring Data JPA
 
-- H2
+- Spring Security
+
+- JWT
+
+- H2 (banco em memória)
+
+- Swagger / Springdoc OpenAPI
 
 ## Como Executar
 1. Clone o repositório:
 
 ```sh
-    git clone 
+    git clone https://github.com/cai0Carvalho/API-Spring-Boot.git
 ```
 2. Acesse o diretório do projeto:
 
 ```sh
-    cd https://github.com/cai0Carvalho/API-Spring-Boot.git
+    cd API-Spring-Boot
 ```
 3. Compile e execute a aplicação:
 
 ```sh
     mvn spring-boot:run
 ```
-- A API estará disponível em: http://localhost:9090
+- A API estará disponível em: http://localhost:8081
 
-## Endpoints Padrões
+## 🔑 Endpoints Padrões
 Exemplo de endpoints implementados no controller:
 
-° `GET /api/usuarios` - Retorna a lista de usuários
+### 🔐 Autenticação (com JWT)
 
-° `POST /api/usuarios` - Cria um novo usuário
+° `POST /auth/registro` - Registra um novo usuário e retorna o token JWT
+
+° `POST /auth/login` - Realiza login e retorna o token JWT
+
+### 👤 Usuário autenticado
+
+° `GET /user/info` - Retorna os dados do usuário autenticado (extraídos do token)
 
 ° `PUT /api/usuarios/{id}` - Atualiza um usuário
 
